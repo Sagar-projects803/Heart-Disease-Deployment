@@ -26,12 +26,13 @@ HeartDiseaseDeployment/
 ├── README.md
 ├── templates/
 │   └── index.html         # Optional simple web UI for manual testing
-└── static/                 # (unused, reserved for future assets)
+└── static/
+    └── style.css              
 ```
 
 ---
 
-## Task 1: Data Understanding and Preprocessing
+## 1: Data Understanding and Preprocessing
 
 Implemented in `train_model.py`. Steps performed:
 
@@ -43,7 +44,7 @@ Implemented in `train_model.py`. Steps performed:
 4. Check for missing values with `df.isnull().sum()` — the dataset has no missing values.
 5. Split into 80% training / 20% testing using `train_test_split(test_size=0.20, stratify=y, random_state=42)`.
 
-## Task 2: Model Development
+## 2: Model Development
 
 - **Algorithm used:** `RandomForestClassifier` (scikit-learn), `n_estimators=200`, `max_depth=6`.
 - **Evaluation metric:** Accuracy Score on the 20% held-out test set (see console output of `train_model.py` for the exact run, typically in the 0.6–0.7 range on the bundled synthetic data; expect higher accuracy on the real Kaggle dataset, which has stronger feature-target correlations).
@@ -58,7 +59,7 @@ python generate_data.py   # optional — regenerate heart.csv, or replace with t
 python train_model.py
 ```
 
-## Task 3: API Development
+## 3: API Development
 
 Implemented in `app.py` using Flask.
 
@@ -100,25 +101,8 @@ python app.py
 
 ---
 
-## Task 4: GitHub and Render Deployment
 
-### GitHub
-
-1. Create a new **public** repository, e.g. `HeartDiseaseDeployment`.
-2. Push all files in this project (source code, `model.pkl`, `app.py`, `requirements.txt`, `README.md`, etc.) to the repo:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit: heart disease prediction API"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/HeartDiseaseDeployment.git
-   git push -u origin main
-   ```
-
-
----
-
-## Task 5: Conclusion
+## 4: Conclusion
 
 The Random Forest model achieved reasonable accuracy in classifying patients
 by heart disease risk, with strong recall on positive cases, making it a
@@ -135,7 +119,7 @@ on in production.
 
 ---
 
-## Tech Stack
+## 5 Tech Stack
 
 - **Language:** Python 3
 - **ML:** scikit-learn, pandas, numpy, joblib
