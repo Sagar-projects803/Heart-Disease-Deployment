@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Heart Disease Risk Predictor</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 20px; color: #222; }
+  h1 { font-size: 1.4rem; }
+  form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }
+  label { font-size: 0.85rem; display: flex; flex-direction: column; gap: 4px; }
+  input { padding: 6px 8px; }
+  button { grid-column: 1 / -1; padding: 10px; background: #b91c1c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; }
+  #result { margin-top: 20px; padding: 12px; border-radius: 4px; font-weight: bold; display: none; }
+</style>
+</head>
+<body>
+  <h1>Heart Disease Risk Predictor</h1>
+  <p>Enter clinical parameters below to get a prediction from the trained model.</p>
+  <form id="predict-form">
+    {% for f in features %}
+    <label>{{ f }}
+      <input type="number" step="any" name="{{ f }}" required>
+    </label>
+    {% endfor %}
+    <button type="submit">Predict</button>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    const form = document.getElementById('predict-form');
+    const resultDiv = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const payload = {};
+      formData.forEach((value, key) => payload[key] = parseFloat(value));
+
+      resultDiv.style.display = 'block';
+      resultDiv.style.background = '#eee';
+      resultDiv.textContent = 'Predicting...';
+
+      try {
+        const res = await fetch('/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.error) {
+          resultDiv.style.background = '#fee2e2';
+          resultDiv.textContent = 'Error: ' + data.error;
+        } else {
+          resultDiv.style.background = data.prediction_label === 1 ? '#fee2e2' : '#dcfce7';
+          resultDiv.textContent = `${data.prediction} (probability: ${data.probability})`;
+        }
+      } catch (err) {
+        resultDiv.style.background = '#fee2e2';
+        resultDiv.textContent = 'Request failed: ' + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
