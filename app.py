@@ -23,8 +23,7 @@ FEATURES = MODEL_BUNDLE["features"]
 
 @app.route("/", methods=["GET"])
 def home():
-    """Optional simple web UI for manual testing."""
-    return render_template("index.html", features=FEATURES)
+    return render_template("index.html")
 
 
 @app.route("/health", methods=["GET"])
